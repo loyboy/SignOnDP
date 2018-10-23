@@ -1,0 +1,160 @@
+@layout('layouts.app')
+@section('canvas')
+<div style="display:none;">
+    <div class="container" style="text-align: center;">
+    
+    @if(pimage != null)
+    <!-- personal image --->
+    <img id="first" width="900" height="720"  {{ pimage }}   />
+    @endif
+
+    <!-- background image --->
+    <img id="second" width="800" height="1000" src="/frames/frame.png" />
+  
+    <canvas id="result" width="800" height="1000" style="border:0px dashed red;"></canvas>
+
+</div>
+</div>
+@endsection
+
+@section('main')
+ <div class="row fullscreen align-items-center justify-content-between">
+            <!--Left hand side  -->
+            <div class="col-lg-6 col-md-6 banner-left">
+              <h3> <b> Sign On For PDP </b></h3> <br><br>
+
+              @if(done == 'true') 
+              <a id="dl" download="IsignOnForUdom.jpg" href="#"> </a> &nbsp;&nbsp; 
+              <div class="alert alert-success">
+              <strong>Success!</strong> Your image will be downloaded in a few seconds.... 
+             </div>
+              @endif
+              @if(done == 'filetoobig') 
+               <div class="alert alert-danger alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <i class="fa fa-allergies"></i>&nbsp;&nbsp;The file you uploaded seems larger than 5MB. Max. filesize is 5MB. 
+                </div>
+              @endif
+               @if(done == 'filenotimage') 
+               <div class="alert alert-danger alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <i class="fa fa-allergies"></i>&nbsp;&nbsp;The file you uploaded seems not to be an image. Please upload a .jpg or .png file. 
+                </div>
+              @endif 
+             <form class="form-area contact-form text-right" style="margin: 10px 0px 0px 10px;" id="myForm" method="post" action="signon" enctype="multipart/form-data">
+                
+                <div class="row"> 
+                {{ csrfField() }}
+                  <div class="col-lg-6 form-group">
+                    <input name="name" placeholder="Enter your name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter your name'" class="common-input mb-20 form-control" required="required" type="text">
+                  
+                    <input name="image"  class="common-input mb-20 form-control" required="required" type="file">
+
+                    
+                  </div>
+                 
+                 </div>
+                 <div class="col-md-3 form-group">
+                 <input type="submit" class="primary-btn text-uppercase" style="float: left;" value="Sign On"> 
+                 </div>
+              </form>
+
+             </div>
+              <!--Right hand side d-flex align-self-end -->
+            <div class="col-lg-6 col-md-6 banner-right align-self-end d-none d-md-block">
+              <img  src="/pdp_cover.png" width="600" height="650" alt="">
+            </div>
+
+          </div>
+@endsection
+
+@section('canvas_script')
+
+<script>
+ 
+// Get all your images.
+var first  = document.getElementById('first');
+var second = document.getElementById('second');
+
+// get canvas and context
+var result = document.getElementById('result');
+var context = result.getContext('2d');
+  
+loaded = 0;
+
+name = "{{ username }}";
+
+function combine(){
+  // The order of drawing will be the order of layers
+  // The final two arguments define the size of what you want to draw
+  //context.drawImage(first, 0, 0, 900, 720); used with old frame
+  //context.drawImage(second, 0, 0, 800, 1000); used with old frame
+  //used on new frame
+  context.drawImage(first, 0, 0, 900, 720);
+  context.drawImage(second, 0, 0, 800, 1000);
+  
+  //context.drawImage(first, 0, 0, 670, 745);
+  //context.drawImage(second, 0, 0, 670, 850);
+  
+  //context.drawImage(third, 85, 85, 30, 30);//
+  
+  context.font="bold 26px verdana";
+  context.fillStyle = "black";
+  context.fontWeight = "bold";
+  
+   context.fillText(name,160,680);
+  
+  
+}
+//window.onload = function() {
+// Add event listeners to the images
+first.addEventListener('load', function(){ 
+  // increase the loaded number
+  loaded++; 
+  // hide the image
+  first.style.display = 'none'; 
+  // if loaded hits the total number of images, use the completion function
+  if(loaded === 2) combine(); 
+}, false);
+
+// (wrince, repeat for image 2)
+second.addEventListener('load', function(){
+  loaded++; 
+  second.style.display = 'none'; 
+  if(loaded === 2) combine(); 
+}, false);
+//}
+
+
+
+</script>
+
+@endsection
+
+@section('canvas_load')
+  
+  @if(done == 'true')
+  <script type='text/javascript'>
+    window.onload = function(){ 
+        
+    var interval = null;
+    setTimeout(function() {
+    interval = setInterval(function() {
+        
+        jQuery('#loading').show();
+    }, 100);
+
+    //Stop the functions after 3 seconds.
+    setTimeout(function() { jQuery('#loading').hide(); clearInterval(interval); jQuery('#dl')[0].click();  }, 3000);
+  }, 2000);
+        
+      
+    };
+      
+  </script>
+  @endif
+
+  <div id="loading" style="display: none;">
+      <img id="loading-image" src="/myloader.gif" alt="Loading..." />
+  </div>
+@endsection
