@@ -3,7 +3,7 @@ You can create a personal DP for a pre-defined image that will be drawn on top i
 
 # Clone This Repository
 git clone https://github.com/loyboy/SignOnDP.git
-cd SignOnDP
+<p> cd SignOnDP </p>
 
 # Install dependencies
 npm install
