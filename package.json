@@ -1,8 +1,8 @@
 {
-  "name": "adonis-fullstack-app",
-  "version": "4.1.0",
+  "name": "SignOn-app",
+  "version": "1.0.0",
   "adonis-version": "4.1.0",
-  "description": "The fullstack application boilerplate for Adonisjs",
+  "description": "The fullstack application to Signon Political Party",
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
@@ -17,7 +17,9 @@
   },
   "keywords": [
     "adonisjs",
-    "adonis-app"
+    "adonis-app",
+    "nodejs",
+    "vuejs"
   ],
   "author": "",
   "license": "UNLICENSED",
